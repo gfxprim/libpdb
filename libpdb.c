@@ -212,12 +212,12 @@ static size_t pdb_lz77_decompressed_size(struct pdb_buf *buf)
 			while (b-- && i < buf->size)
 				size++;
 		break;
-		case 0x80 ... 0xbf:
+		case 0x80 ... 0xbf: {
 			uint16_t data = (b<<8) | buf->data[i++];
 			uint8_t length = (data & 0x0007) + 3;
 
 			size+=length;
-		break;
+		} break;
 		case 0xc0 ... 0xff:
 			size+=2;
 		break;
@@ -253,7 +253,7 @@ struct pdb_buf *pdb_decompress_lz77(struct pdb *pdb, struct pdb_buf *buf)
 			while (b-- && i < buf->size)
 				decomp[j++] = buf->data[i++];
 		break;
-		case 0x80 ... 0xbf:
+		case 0x80 ... 0xbf: {
 			uint16_t data = (b<<8) | buf->data[i++];
 			uint16_t distance = (data & 0x3fff)>>3;
 			uint8_t length = (data & 0x0007) + 3;
@@ -261,7 +261,7 @@ struct pdb_buf *pdb_decompress_lz77(struct pdb *pdb, struct pdb_buf *buf)
 
 			for (l = 0; l < length; l++, j++)
 				decomp[j] = j >= distance ? decomp[j - distance] : 0;
-		break;
+		} break;
 		case 0xc0 ... 0xff:
 			decomp[j++] = ' ';
 			decomp[j++] = b ^ 0x80;
