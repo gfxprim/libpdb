@@ -195,8 +195,8 @@ int main(int argc, char *argv[])
 					if (buf2 == NULL) {
 						printf("Failed to decompress record nr. %u\n", record_nr);
 					} else {
-						free(buf2);
 						print_raw_buf(buf2);
+						free(buf2);
 					}
 				} else
 					print_raw_buf(buf1);
